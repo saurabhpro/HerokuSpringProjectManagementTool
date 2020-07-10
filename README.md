@@ -12,3 +12,4 @@
 
 ## heroku procfile fix 
 - https://stackoverflow.com/a/53084552/4853910
+-  heroku logs --tail -n 200 -a project-management-spring-boot
