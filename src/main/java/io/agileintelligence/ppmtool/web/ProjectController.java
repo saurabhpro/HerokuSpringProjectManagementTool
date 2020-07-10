@@ -6,6 +6,7 @@ import io.agileintelligence.ppmtool.domain.Project;
 import io.agileintelligence.ppmtool.exceptions.MapValidationErrorComponent;
 import io.agileintelligence.ppmtool.repositories.BacklogRepository;
 import io.agileintelligence.ppmtool.services.ProjectService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -16,6 +17,7 @@ import java.net.URI;
 import java.security.Principal;
 import java.util.List;
 
+@Slf4j
 /*this allows url from some other server to be allowed*/
 @CrossOrigin
 @RestController
@@ -33,8 +35,9 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ResponseEntity<Project> createNewProject(@Validated @RequestBody Project project, BindingResult result, Principal currentLoggedInUser) {
-
+    public ResponseEntity<Project> createNewProject(@Validated @RequestBody Project project,
+                                                    BindingResult result, Principal currentLoggedInUser) {
+        log.info("POST Request To Add project received with " + currentLoggedInUser.getName());
         mapValidationErrorComponent.mapValidationErrors(result);
 
         if (project.getId() == null) {
@@ -61,7 +64,7 @@ public class ProjectController {
 
     @GetMapping("/{projectId}")
     public ResponseEntity<Project> getProjectById(@PathVariable String projectId, Principal currentLoggedInUser) {
-
+        log.info("GET Request To get project  received with " + currentLoggedInUser.getName());
         Project project = projectService.findProjectByIdentifier(projectId, currentLoggedInUser.getName());
 
         return ResponseEntity.ok(project);
@@ -69,11 +72,13 @@ public class ProjectController {
 
     @GetMapping
     public List<Project> getAllProjects(Principal currentLoggedInUser) {
+        log.info("GET Request To get all projects received with " + currentLoggedInUser.getName());
         return projectService.findAllProjects(currentLoggedInUser.getName());
     }
 
     @DeleteMapping("/{projectId}")
     public ResponseEntity<Object> deleteProject(@PathVariable String projectId, Principal currentLoggedInUser) {
+        log.info("DELETE Request To delete project received with " + currentLoggedInUser.getName()  + " and id "+ projectId);
         projectService.deleteProjectByIdentifier(projectId, currentLoggedInUser.getName());
 
         return ResponseEntity.ok("Project with ID: '" + projectId + "' was deleted");

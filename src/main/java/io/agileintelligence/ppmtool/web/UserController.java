@@ -7,6 +7,7 @@ import io.agileintelligence.ppmtool.loginpayload.LoginRequest;
 import io.agileintelligence.ppmtool.security.JWTTokenProvider;
 import io.agileintelligence.ppmtool.services.UserService;
 import io.agileintelligence.ppmtool.validator.UserValidator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +21,7 @@ import javax.validation.Valid;
 
 import static io.agileintelligence.ppmtool.security.SecurityConstants.BEARER_TOKEN_PREFIX;
 
+@Slf4j
 @RestController
 @CrossOrigin
 @RequestMapping("/api/users")
@@ -41,6 +43,8 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody User user, BindingResult result) {
+        log.info("POST Request To register user "+ user +" received");
+
         // Validate passwords match
         userValidator.validate(user, result);
 
@@ -54,6 +58,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<JWTLoginSuccessResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest,
                                                                     BindingResult result) {
+        log.info("POST Request To register user "+ loginRequest +" received");
         mapValidationErrorComponent.mapValidationErrors(result);
 
         final Authentication authentication = authenticationManager.authenticate(

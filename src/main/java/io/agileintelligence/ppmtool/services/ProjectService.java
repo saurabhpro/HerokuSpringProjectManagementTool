@@ -40,7 +40,7 @@ public class ProjectService {
         }
 
         if(project.getDescription().length() > 255){
-            throw new ValueToBigForDatabaseException("Description please enter only 255 characters");
+            throw new ValueToBigForDatabaseException("Please enter < 255 characters");
         }
         Optional<User> user = userRepository.findByUsername(username);
         return user.map(usr -> {

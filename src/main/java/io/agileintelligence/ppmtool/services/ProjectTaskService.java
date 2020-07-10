@@ -2,6 +2,7 @@ package io.agileintelligence.ppmtool.services;
 
 import io.agileintelligence.ppmtool.domain.Backlog;
 import io.agileintelligence.ppmtool.domain.ProjectTask;
+import io.agileintelligence.ppmtool.exceptions.descriptionbig.ValueToBigForDatabaseException;
 import io.agileintelligence.ppmtool.exceptions.projectnotfound.ProjectNotFoundException;
 import io.agileintelligence.ppmtool.repositories.BacklogRepository;
 import io.agileintelligence.ppmtool.repositories.ProjectTaskRepository;
@@ -49,6 +50,10 @@ public class ProjectTaskService {
             if (StringUtils.isEmpty(projectTask.getStatus())) {
                 projectTask.setStatus("TO_DO");
             }
+        }
+
+        if(projectTask.getSummary().length() > 255){
+            throw new ValueToBigForDatabaseException("Please enter < 255 characters");
         }
 
         return projectTaskRepository.save(projectTask);

@@ -3,6 +3,7 @@ package io.agileintelligence.ppmtool.web;
 import io.agileintelligence.ppmtool.domain.ProjectTask;
 import io.agileintelligence.ppmtool.exceptions.MapValidationErrorComponent;
 import io.agileintelligence.ppmtool.services.ProjectTaskService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 @CrossOrigin
+@Slf4j
 public class BacklogController {
 
     private final ProjectTaskService projectTaskService;
@@ -31,7 +33,7 @@ public class BacklogController {
                                                       BindingResult result,
                                                       @PathVariable String projectIdentifier,
                                                       Principal principal) {
-
+        log.info("POST Request To Add project task received with " + principal.getName());
         mapValidationErrorComponent.mapValidationErrors(result);
 
         ProjectTask projectTask1 = projectTaskService.addProjectTask(projectIdentifier, projectTask, principal.getName());
@@ -46,6 +48,8 @@ public class BacklogController {
 
     @GetMapping("/projects/{projectIdentifier}/backlog")
     public Iterable<ProjectTask> getProjectBacklog(@PathVariable String projectIdentifier, Principal principal) {
+        log.info("GET Request To get all project tasks received with " + principal.getName());
+
         return projectTaskService.findBacklogById(projectIdentifier, principal.getName());
     }
 
@@ -53,6 +57,8 @@ public class BacklogController {
     public ResponseEntity<ProjectTask> getProjectTask(@PathVariable String backlogId,
                                                       @PathVariable String projectTaskId,
                                                       Principal principal) {
+        log.info("GET Request To get one project task received with " + principal.getName() + " and id "+ backlogId);
+
         Optional<ProjectTask> projectTask = projectTaskService.findPTByProjectSequence(backlogId, projectTaskId, principal.getName());
         return ResponseEntity.ok(projectTask.get());
     }
@@ -63,7 +69,7 @@ public class BacklogController {
                                                          @PathVariable String backlogId,
                                                          @PathVariable String projectTaskId,
                                                          Principal principal) {
-
+        log.info("PATCH Request To update project task received with " + principal.getName());
         mapValidationErrorComponent.mapValidationErrors(result);
 
         ProjectTask updatedTask = projectTaskService.updateByProjectSequence(projectTask, backlogId, projectTaskId, principal.getName());
@@ -76,6 +82,7 @@ public class BacklogController {
     public ResponseEntity<Object> deleteProjectTask(@PathVariable String backlogId,
                                                     @PathVariable String projectTaskId,
                                                     Principal principal) {
+        log.info("DELETE Request To delete project task received with " + principal.getName() + " and id "+ backlogId);
         projectTaskService.deletePTByProjectSequence(backlogId, projectTaskId, principal.getName());
 
         return ResponseEntity.ok("Project Task " + projectTaskId + " was deleted successfully");
