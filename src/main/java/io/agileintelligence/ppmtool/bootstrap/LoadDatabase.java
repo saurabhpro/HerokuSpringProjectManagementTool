@@ -15,10 +15,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
-//@Configuration
+@Configuration
 class LoadDatabase {
 
-   // @Bean
+    @Bean
     CommandLineRunner initDatabase(ProjectRepository repository, UserService userService) {
         CommandLineRunner commandLineRunner = null;
         if (repository.findAll().isEmpty()) {

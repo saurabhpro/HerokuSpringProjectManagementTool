@@ -9,3 +9,6 @@
 
 ## read about date time
 - https://stackoverflow.com/a/32443004/4853910
+
+## heroku procfile fix 
+- https://stackoverflow.com/a/53084552/4853910
