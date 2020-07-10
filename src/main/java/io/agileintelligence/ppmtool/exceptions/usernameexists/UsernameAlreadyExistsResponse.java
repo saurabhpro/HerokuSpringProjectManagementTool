@@ -1,12 +1,9 @@
 package io.agileintelligence.ppmtool.exceptions.usernameexists;
 
+import lombok.Data;
 import lombok.Getter;
 
-@Getter
+@Data
 public class UsernameAlreadyExistsResponse {
-    private String username;
-
-    public UsernameAlreadyExistsResponse(String username) {
-        this.username = username;
-    }
+    private final String username;
 }

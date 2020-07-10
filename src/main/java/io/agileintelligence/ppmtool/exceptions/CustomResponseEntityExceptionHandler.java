@@ -1,6 +1,8 @@
 package io.agileintelligence.ppmtool.exceptions;
 
 
+import io.agileintelligence.ppmtool.exceptions.descriptionbig.ValueToBigForDatabaseException;
+import io.agileintelligence.ppmtool.exceptions.descriptionbig.ValueToBigForDatabaseExceptionResponse;
 import io.agileintelligence.ppmtool.exceptions.projectid.ProjectIdException;
 import io.agileintelligence.ppmtool.exceptions.projectid.ProjectIdExceptionResponse;
 import io.agileintelligence.ppmtool.exceptions.projectnotfound.ProjectNotFoundException;
@@ -38,6 +40,12 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     @ExceptionHandler
     public final ResponseEntity<Object> handleUsernameExistsException(UsernameAlreadyExistsException ex) {
         final var exceptionResponse = new UsernameAlreadyExistsResponse(ex.getLocalizedMessage());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleBigDescriptionException(ValueToBigForDatabaseException ex) {
+        final var exceptionResponse = new ValueToBigForDatabaseExceptionResponse(ex.getLocalizedMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 }

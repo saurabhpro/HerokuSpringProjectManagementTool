@@ -3,6 +3,7 @@ package io.agileintelligence.ppmtool.services;
 import io.agileintelligence.ppmtool.domain.Project;
 import io.agileintelligence.ppmtool.domain.User;
 import io.agileintelligence.ppmtool.exceptions.InvalidUserException;
+import io.agileintelligence.ppmtool.exceptions.descriptionbig.ValueToBigForDatabaseException;
 import io.agileintelligence.ppmtool.exceptions.projectid.ProjectIdException;
 import io.agileintelligence.ppmtool.exceptions.projectnotfound.ProjectNotFoundException;
 import io.agileintelligence.ppmtool.repositories.ProjectRepository;
@@ -38,6 +39,9 @@ public class ProjectService {
             }
         }
 
+        if(project.getDescription().length() > 255){
+            throw new ValueToBigForDatabaseException("Description please enter only 255 characters");
+        }
         Optional<User> user = userRepository.findByUsername(username);
         return user.map(usr -> {
                     project.setUser(usr);
